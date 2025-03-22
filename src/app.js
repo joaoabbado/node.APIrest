@@ -16,7 +16,7 @@ const livros = [
 function buscaLivro(id){
     return livros.findIndex(livro =>{
         return livro.id === Number(id) //como os dados trafegam no formato string precisamos converter para number
-    })  //finIndex  metodo do js para array que retorna em qual indice do array esta determinado elemento
+    })  //O findIndex é uma função que percorre o array e retorna o índice do primeiro elemento que satisfaz a condição fornecida. Se nenhum elemento for encontrado, ele retorna -1.
 }
 
 app.get("/", (req, res) => {
