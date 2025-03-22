@@ -1,29 +1,25 @@
 import express from "express";
+import conectaNaDatabase from "./config/dbConnect.js";
+import livro from "./models/Livro.js"
+
+const conexao = await conectaNaDatabase();
+
+conexao.on("error", (erro) =>{    // error, evento mongoose
+    console.error("erro de conexão", erro);
+})
+conexao.once("open", () =>{
+    console.log("Conexao com banco feita com sucesso")
+})  //metodo que espera por um evento
 
 const app = express();
-app.use(express.json()); // middlewar, precisamos dele pos sempre chega dados via body ele chega convertido como string e para usar como json, precisamos converter
-
-const livros = [
-    {
-        id:1,
-        titulo:"O senhor dos Anés"
-    },
-    {
-        id:2,
-        titulo: "O Hobbit"
-    }
-]
-function buscaLivro(id){
-    return livros.findIndex(livro =>{
-        return livro.id === Number(id) //como os dados trafegam no formato string precisamos converter para number
-    })  //O findIndex é uma função que percorre o array e retorna o índice do primeiro elemento que satisfaz a condição fornecida. Se nenhum elemento for encontrado, ele retorna -1.
-}
+app.use(express.json()); // middleware, precisamos dele pos sempre chega dados via body ele chega convertido como string e para usar como json, precisamos converter
 
 app.get("/", (req, res) => {
     res.status(200).send("Curso de node.js"); //send usado para dados mais simples
 });
-app.get("/livros", (req, res) =>{ //app.get cria uma rota que responde a requisições GET (usada para buscar informações) 
-    res.status(200).json(livros); //re..status(200) define o código de status HTTP como 200, que significa requisição bem-sucedida.
+app.get("/livros", async (req, res) =>{ //app.get cria uma rota que responde a requisições GET (usada para buscar informações) 
+    const listaLivros = await livro.find({}); //const onde vai guradar os  livros que retornar do banco/ o.find e um metodo do mongoose que se conecta com banco e busca tuo que encontra na coloecao livros
+    res.status(200).json(listaLivros); //re..status(200) define o código de status HTTP como 200, que significa requisição bem-sucedida.
 });
 app.get("/livros/:id",(req, res) =>{
     const index = buscaLivro(req.params.id); //params e uma propriedade de req, e o id e um parametro da rota
