@@ -1,10 +1,11 @@
 import express from "express"
-import LivroCOntroller  from "../controllers/livroController.js"
+import LivroController  from "../controllers/livroController.js"
 
 const routes = express.Router();
 
-routes.get("/livros", LivroCOntroller.listarLivros);
-routes.get("/livros/:id", LivroCOntroller.listarLivrosPorId);
-routes.post("/livros", LivroCOntroller.cadastrarLivro);
-routes.put("/livros/:id", LivroCOntroller.atualizarLivro);
+routes.get("/livros", LivroController.listarLivros);
+routes.get("/livros/:id", LivroController.listarLivrosPorId);
+routes.post("/livros", LivroController.cadastrarLivro);
+routes.put("/livros/:id", LivroController.atualizarLivro);
+routes.delete("/livros/:nome", LivroController.deletarLivro)
 export default routes;

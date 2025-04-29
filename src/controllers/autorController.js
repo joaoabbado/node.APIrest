@@ -1,26 +1,25 @@
 //centralizar toda logica
-import livro from "../models/Livro.js"
 import {autor} from "../models/Autor.js"
 
-class LivroController{
+class AutorController{
 
     static async listarLivros (req, res){
        try{
-        const listaLivros = await livro.find({}); 
-        res.status(200).json(listaLivros);
+        const listaAutores = await autor.find({}); 
+        res.status(200).json(listaAutores);
 
        }catch (erro){
-        res.status(500).json({message:`${erro.message}` })
+        res.status(500).json({message:`${erro.message} falha na requisição` })
 
        }
        
         
     };
-    static async listarLivrosPorId (req, res){
+    static async listarAutorPorId (req, res){
         try{
          const id= req.params.id;
-         const livroEncontrado = await livro.findById(id); 
-         res.status(200).json(livroEncontrado);
+         const autorEncontrado = await livro.findById(id); 
+         res.status(200).json(autorEncontrado);
  
         }catch (erro){
          res.status(500).json({message:`${erro.message} - falha na requisição do livro` })
@@ -29,13 +28,10 @@ class LivroController{
         
          
      };
-    static async cadastrarLivro (req,res){
-        const novoLivro = req.body; 
+    static async cadastrarAutor (req,res){
          
         try{
-            const autorEncontrado = await autor.findById(novoLivro.autor);
-            const livroCompleto = {... novoLivro, autor: {...autorEncontrado._doc}};
-            const livroCriado =  await livro.create(livroCompleto);
+            const novoAutor = await autor.create(req.body);     // livro e o que ta chamando o modelo do mongoose, create e o metodo que mongoose usa para criar registro no banco
             res.status(201).json({message: "criado com sucesso", livro: novoLivro})
 
         }catch (erro){
@@ -43,7 +39,7 @@ class LivroController{
         }
     };
     
-    static async atualizarLivro (req, res){
+    static async atualizarAutor (req, res){
         try{
          const id= req.params.id;
           await livro.findByIdAndUpdate(id, req.body); 
@@ -56,10 +52,10 @@ class LivroController{
         
          
      };
-     static async deletarLivro (req,res){
+     static async excluirAutor (req,res){
         try{
            const nome = req.params.nome;
-           const livroDeletado = await livro.findOneAndDelete({titulo:nome})
+           const autorDeletado = await autor.findOneAndDelete({titulo:nome})
            if (!livroDeletado){
             return res.status(404).json({message: "livro não encontrado"})
            }
@@ -73,4 +69,4 @@ class LivroController{
 
 
 };
-export default LivroController;
+export default AutorController;
