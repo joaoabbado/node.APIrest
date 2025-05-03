@@ -67,6 +67,17 @@ class LivroController{
         }catch (erro){
             res.status(500).json({message:`${erro.message}- erro ao deletar livro`})
         }
+     };
+
+     static async listarLivrosPorEditora (req,res){    /*usar o parametro de query*/ 
+        const editora = req.query.editora;
+        try{
+            const livrosPorEditora = await livro.find({editora:editora})   /* e a propriedade editora do model livro e o segundo a variavel que ta guardando a informação*/ 
+            res.status(200).json(livrosPorEditora)
+        }catch (erro){
+            res.status(500).json({message: `${erro.message} - falha na busca`})
+
+        }
      }
 
 
